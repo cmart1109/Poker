@@ -2,22 +2,12 @@
 public class Hand
 {
     private List<Card> _hand = new List<Card>();
-    public Dictionary<string, int> GetCardsCount()
-    {
-        return _hand.GroupBy(c => c._number)
-        .ToDictionary(global => global.Key, global=> global.Count());
-    }
-
     public Hand()
     {
         
     }
     
-    public List<Card> GenerateHand(List<Card> deck){
-        for (int i = 1; i <= 3; i++)
-        {
-            _hand.Add(GetRandomCard(deck));
-        }
+    public virtual List<Card> GenerateHand(List<Card> deck){
     return _hand;
     }
     
@@ -26,10 +16,29 @@ public class Hand
         Random random = new Random();
         int index = random.Next(deck.Count);
         Card card = deck[index];
+        deck.Remove(deck[index]);
         return card;
-    }}
+    }
+    public virtual void PrintHand()
+    {
+        foreach (var hand in _hand)
+        {
+            hand.PrintCard();
+        }
+    }
+
+    public virtual void GetCard(List<Card >deck)
+    {
+        Card newCard = GetRandomCard(deck);
+        _hand.Add(newCard);
+    }
 
 
+
+
+
+
+    }
 
 
 
