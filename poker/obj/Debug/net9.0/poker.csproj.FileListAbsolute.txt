@@ -1,0 +1,15 @@
+C:\Users\cmartinez03\Documents\Prctcs\Project-33\Poker\poker\bin\Debug\net9.0\poker.exe
+C:\Users\cmartinez03\Documents\Prctcs\Project-33\Poker\poker\bin\Debug\net9.0\poker.deps.json
+C:\Users\cmartinez03\Documents\Prctcs\Project-33\Poker\poker\bin\Debug\net9.0\poker.runtimeconfig.json
+C:\Users\cmartinez03\Documents\Prctcs\Project-33\Poker\poker\bin\Debug\net9.0\poker.dll
+C:\Users\cmartinez03\Documents\Prctcs\Project-33\Poker\poker\bin\Debug\net9.0\poker.pdb
+C:\Users\cmartinez03\Documents\Prctcs\Project-33\Poker\poker\obj\Debug\net9.0\poker.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\cmartinez03\Documents\Prctcs\Project-33\Poker\poker\obj\Debug\net9.0\poker.AssemblyInfoInputs.cache
+C:\Users\cmartinez03\Documents\Prctcs\Project-33\Poker\poker\obj\Debug\net9.0\poker.AssemblyInfo.cs
+C:\Users\cmartinez03\Documents\Prctcs\Project-33\Poker\poker\obj\Debug\net9.0\poker.csproj.CoreCompileInputs.cache
+C:\Users\cmartinez03\Documents\Prctcs\Project-33\Poker\poker\obj\Debug\net9.0\poker.sourcelink.json
+C:\Users\cmartinez03\Documents\Prctcs\Project-33\Poker\poker\obj\Debug\net9.0\poker.dll
+C:\Users\cmartinez03\Documents\Prctcs\Project-33\Poker\poker\obj\Debug\net9.0\refint\poker.dll
+C:\Users\cmartinez03\Documents\Prctcs\Project-33\Poker\poker\obj\Debug\net9.0\poker.pdb
+C:\Users\cmartinez03\Documents\Prctcs\Project-33\Poker\poker\obj\Debug\net9.0\poker.genruntimeconfig.cache
+C:\Users\cmartinez03\Documents\Prctcs\Project-33\Poker\poker\obj\Debug\net9.0\ref\poker.dll
