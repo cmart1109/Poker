@@ -1,11 +1,10 @@
 
 using System.ComponentModel.Design;
 
-public class YourHand : Hand
+public class RivalHand : Hand
 {   
     private int _order = 0;
     private List<Card> _hand = new List<Card>();
-    private int _maxNumber;
 
     private bool CheckStraight(List<int> numbers)
     {
@@ -41,15 +40,13 @@ public class YourHand : Hand
         return _hand.GroupBy(c => c._symbol)
         .ToDictionary(global => global.Key, global=> global.Count());
     }
-    public YourHand()
+    public RivalHand()
     {
 
     }
-
-
     public override List<Card> GenerateHand(List<Card> deck)
     {
-        for (int i = 1; i <= 2; i++)
+        for (int i = 1; i <= 3; i++)
         {
             _hand.Add(GetRandomCard(deck));
             
@@ -84,47 +81,47 @@ public class YourHand : Hand
 
         if (hasFour)
         {
-            Console.WriteLine("Tienes un Poker!");
+            Console.WriteLine("Tu Rival tiene un Poker!");
             _order = 3;
             
         }
         else if (hasColor && HasStraight)
         {
-            Console.WriteLine("Tienes una Escalera de Color!");
+            Console.WriteLine("Tu Rival tiene una Escalera de Color!");
             _order = 2;
         }
         else if (HasStraight)
         {
-            Console.WriteLine("Tienes una Escalera!");
+            Console.WriteLine("Tu Rival tiene una Escalera!");
             _order = 6;
         }
         else if (hasColor)
         {
-            Console.WriteLine("Tienes un Color!");
+            Console.WriteLine("Tu Rival tiene un Color!");
             _order = 5;
         }
         else if (hasThree && pairs == 1)
         {
-            Console.WriteLine("Tienes un FullHouse!");
+            Console.WriteLine("Tu Rival tiene un FullHouse!");
             _order = 4;
         }
         else if (hasThree)
         {
-            Console.WriteLine("Tienes un Trio!");
+            Console.WriteLine("Tu Rival tiene un Trio!");
             _order = 7;
         }
         else if (pairs == 2) {
-            Console.WriteLine("Tienes un doble Par!");
+            Console.WriteLine("Tu Rival tiene un doble Par!");
             _order = 8;
         }
         else if (pairs == 1)
         {
-            Console.WriteLine("Tienes un par!");
+            Console.WriteLine("Tu Rival tiene un par!");
             _order = 9;
         }
         else 
         {
-            Console.WriteLine("Tienes una carta mas alta!");
+            Console.WriteLine("Tu Rival tiene una carta mas alta!");
             _order = 10;
         }
     }

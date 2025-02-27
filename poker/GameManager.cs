@@ -10,15 +10,43 @@ public class GameManager
         Console.WriteLine("Bienvenidos a Poker Texas Hold'em, donde su suerte se ve reflejada!");
         GenerateDeck();
         YourHand player = new YourHand();
+        RivalHand rival = new RivalHand();
+        // Aqui se generan los dos mazos
         player.GenerateHand(_deck);
-        player.PrintHand();
+        rival.GenerateHand(_deck);
         Console.WriteLine("Estas son tus dos primeras cartas");
+        player.PrintHand();
         player.CheckHand();
         Console.ReadLine();
+
         player.GetCard(_deck);
+        Console.WriteLine("Estas son tus tres cartas");
         player.PrintHand();
-        Console.WriteLine("Este es tu nuevo Mazo");
         player.CheckHand();
+        Console.ReadLine();
+
+        Console.WriteLine("Este es el Mazo de tu Rival");
+        rival.PrintHand();
+        rival.CheckHand();
+        Console.ReadLine();
+        
+        int playerOrder = player.GetOrder();
+        int rivalOrder = rival.GetOrder();
+        Console.WriteLine(playerOrder);
+        Console.WriteLine(rivalOrder);
+
+
+        if (playerOrder < rivalOrder)
+        {
+            Console.WriteLine("Ganaste!");
+        }
+        else if (playerOrder > rivalOrder)
+        {
+            Console.WriteLine("Perdiste :(");
+        }
+        else {
+            Console.WriteLine("Error, aun no se han programado los empates");
+        }
 
     }
 
