@@ -46,7 +46,6 @@ public class YourHand : Hand
 
     }
 
-
     public override List<Card> GenerateHand(List<Card> deck)
     {
         for (int i = 1; i <= 2; i++)
@@ -74,6 +73,7 @@ public class YourHand : Hand
         var CardCounts = GetCardsCount().Values.ToList();
         var SuitsCounts = GetSuitsCount().Values.ToList();
         var CardsNumber = GetCardsCount().Keys.Select(int.Parse).OrderBy(x => x).ToList();
+        var CardsOrder = GetCardsCount().Keys.Select(int.Parse).OrderByDescending(x => x).ToList();
 
         int pairs = CardCounts.Count(x => x == 2);
         bool hasThree = CardCounts.Contains(3);

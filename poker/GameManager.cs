@@ -11,6 +11,7 @@ public class GameManager
         GenerateDeck();
         YourHand player = new YourHand();
         RivalHand rival = new RivalHand();
+
         // Aqui se generan los dos mazos
         player.GenerateHand(_deck);
         rival.GenerateHand(_deck);
@@ -32,8 +33,6 @@ public class GameManager
         
         int playerOrder = player.GetOrder();
         int rivalOrder = rival.GetOrder();
-        Console.WriteLine(playerOrder);
-        Console.WriteLine(rivalOrder);
 
 
         if (playerOrder < rivalOrder)
