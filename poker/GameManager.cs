@@ -6,10 +6,7 @@ public class GameManager
 
 
     }
-   public void GenerateYourHand(List<Card> deck)
-   {
-    
-   } 
+
    public void GenerateDeck()
    {
     Deck deck = new Deck();
