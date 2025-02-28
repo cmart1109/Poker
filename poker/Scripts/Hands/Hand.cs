@@ -7,8 +7,14 @@ public class Hand
         
     }
     
-    public virtual List<Card> GenerateHand(List<Card> deck){
-    return _hand;
+    public virtual List<Card> GenerateHand(List<Card> deck)
+    {
+        for (int i = 1; i <= 3; i++)
+        {
+            _hand.Add(GetRandomCard(deck));
+            
+        }
+        return _hand;
     }
     
     public Card GetRandomCard(List<Card> deck) {

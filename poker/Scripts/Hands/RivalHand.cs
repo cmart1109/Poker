@@ -53,7 +53,7 @@ public class RivalHand : Hand
 
     public override List<Card> GenerateHand(List<Card> deck)
     {
-        for (int i = 1; i <= 5; i++)
+        for (int i = 1; i <= 2; i++)
         {
             _hand.Add(GetRandomCard(deck));
             
