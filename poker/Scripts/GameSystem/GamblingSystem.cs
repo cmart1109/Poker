@@ -31,7 +31,9 @@ public class GamblingSystem
     }
     public void Bet(){
         if (_playerFirst)
-        {      
+        {    
+            Console.WriteLine("Tu vas primero en esta ronda!");
+            Thread.Sleep(1000);  
     do   {
             Console.WriteLine("ingresa tu apuesta:");
             while (!int.TryParse(Console.ReadLine(), out _playerBet))
@@ -45,12 +47,14 @@ public class GamblingSystem
                 }
                 else {
                     Console.WriteLine($"Número Ingresado: {_playerBet}");
+                    Thread.Sleep(1000);
                     _playerBalance -= _playerBet;
                     _bet += _playerBet * 2;
                     Console.WriteLine($"Ahora tu balance es de {_playerBalance}$");
+                    Thread.Sleep(1000);
                 // -------------------------------------------------------------------------------------
                     _rivalBalance -= _playerBet;
-                    Console.WriteLine("Tu rival ha aceptado la apuesta!");
+                    Thread.Sleep(1000);
                 // -------------------------------------------------------------------------------------
                     Console.WriteLine($"Hay {_bet}$ en Juego!");
                     break;
@@ -86,6 +90,7 @@ public class GamblingSystem
                 _rivalBet += _bet;
                 Console.WriteLine("La Partida se termina.");
                 Console.WriteLine("El rival se queda con lo que esta en el plato de apuestas");
+                _out = true;
 
             }
 
@@ -115,8 +120,11 @@ public class GamblingSystem
 
                 }
             }   
-            else if (decision == "no") {
+            else  {
                 Console.WriteLine("No se apuesta");
+                _rivalBet += _bet;
+                Console.WriteLine("La Partida se termina.");
+                Console.WriteLine("El rival se queda con lo que esta en el plato de apuestas");
                 _out = true;
             }
 
@@ -196,5 +204,12 @@ public class GamblingSystem
     public bool checkBet()
     {
         return _out;
+    }
+
+    public void ReturnMoneyFromReject(){
+        _playerBalance += _bet / 2;
+        _rivalBalance += _bet / 2;
+        _bet = 0;
+
     }
 }
