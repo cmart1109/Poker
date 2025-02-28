@@ -49,12 +49,22 @@ public class GamblingSystem
                     Console.WriteLine($"Número Ingresado: {_playerBet}");
                     Thread.Sleep(1000);
                     _playerBalance -= _playerBet;
-                    _bet += _playerBet * 2;
                     Console.WriteLine($"Ahora tu balance es de {_playerBalance}$");
                     Thread.Sleep(1000);
                 // -------------------------------------------------------------------------------------
-                    _rivalBalance -= _playerBet;
-                    Thread.Sleep(1000);
+                    if (_rivalBalance > _playerBet) {
+                        Console.WriteLine("Tu rival ha aceptado la apuesta!");
+                        _rivalBalance -= _playerBet;
+                        _bet += _playerBet * 2;
+                        Thread.Sleep(1000);
+                    } else {
+                        Console.WriteLine("Tu rival no tiene suficiente para esa apuesta inicial.");
+                        Console.WriteLine("La Partida se termina.");
+                        Console.WriteLine("Te quedas con lo que esta en el plato de apuestas");
+                        _playerBalance += _playerBet;
+                        _bet = 0;
+                        _out = true;
+                    }
                 // -------------------------------------------------------------------------------------
                     Console.WriteLine($"Hay {_bet}$ en Juego!");
                     break;
@@ -64,8 +74,10 @@ public class GamblingSystem
         }
         else {
             Console.WriteLine("Tu rival va primero!");
+            Thread.Sleep(1000);
             RivalStartingBet();
             Console.WriteLine($"Tu rival ha hecho una apuesta de {_rivalBet}$");
+            Thread.Sleep(1000);
             Console.WriteLine("Te unes a la apuesta?: ");
             string decision = Console.ReadLine();
             if (decision == "si")
