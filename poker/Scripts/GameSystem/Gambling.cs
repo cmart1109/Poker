@@ -22,30 +22,41 @@ public class Gambling
     public void StartingBet(){
         Random random = new Random();
         _playerFirst = random.Next(2) == 0;
+        DisplayPlayerBalance();
         if (_playerFirst)
         {
             
-            Console.WriteLine("Tu vas primero, ingresa tu apuesta inicial:");
     do   {
+            Console.WriteLine("ingresa tu apuesta inicial:");
             while (!int.TryParse(Console.ReadLine(), out _playerBet))
-            {
+                {
                 Console.WriteLine("Entrada Invalida. Por favor, ingresa un número válido");
-                Console.Write("Ingresa un número: ");
+                Console.WriteLine("Ingresa un número: ");
+                }   
                 if(_playerBet > _playerBalance)
                 {
                     Console.WriteLine("La apuesta que deseas ingresar supera tu Balance!");
                 }
-                
+                else {
+                    Console.WriteLine($"Número Ingresado: {_playerBet}");
+                    _playerBalance -= _playerBet;
+                    _bet += _playerBet;
+                    Console.WriteLine($"Ahora tu balance es de {_playerBalance}$");
+                    Console.WriteLine($"Hay {_bet}$ en Juego!");
+                    break;
             }
-
-            Console.WriteLine($"Número Ingresado: {_playerBet}");
-            } while (0==0);
+            } while (_playerBet > _playerBalance);
             
+        }
+        else {
+            Console.WriteLine("Tu rival va primero!");
         }
     }
 
     public void RivalStartingBet(){
 
     }
-    
+    public void DisplayPlayerBalance(){
+        Console.WriteLine($"Tienes un Balance de {_playerBalance}$");
+    }
 }
