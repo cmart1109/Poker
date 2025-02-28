@@ -17,23 +17,26 @@ public class GamblingSystem
 
     }
 
+    // Esta Funcion genera el Balance Inicial que tienen ambos jugadores
     public void GetInicialBalance(){
         _playerBalance = 15;
         _rivalBalance = 15;
         _bet = 0;
     }
-
+    // Esta determina el orden en que se juega, y muestra el balance de ambos jugadores
     public void StartingBet(){
         _playerFirst = random.Next(2) == 0;
         DisplayPlayerBalance();
         DisplayRivalBalance();
 
     }
+
+    // Esta es la Funcion principal de las apuestas
     public void Bet(){
         if (_playerFirst)
         {    
-            Console.WriteLine("Tu vas primero en esta ronda!");
             Thread.Sleep(1000);  
+            _out = false;
     do   {
             Console.WriteLine("ingresa tu apuesta:");
             while (!int.TryParse(Console.ReadLine(), out _playerBet))
@@ -52,7 +55,7 @@ public class GamblingSystem
                     Console.WriteLine($"Ahora tu balance es de {_playerBalance}$");
                     Thread.Sleep(1000);
                 // -------------------------------------------------------------------------------------
-                    if (_rivalBalance > _playerBet) {
+                    if (_rivalBalance >= _playerBet) {
                         Console.WriteLine("Tu rival ha aceptado la apuesta!");
                         _rivalBalance -= _playerBet;
                         _bet += _playerBet * 2;
@@ -110,6 +113,8 @@ public class GamblingSystem
         _playerBet = 0;
         _rivalBet = 0;
     }
+
+    // esta funcion se usa para generar la segunda apuesta del rival    
     public void RivalSecondBet(){
             RivalStartingBet();
             Console.WriteLine($"Tu rival ha hecho una apuesta de {_rivalBet}$");

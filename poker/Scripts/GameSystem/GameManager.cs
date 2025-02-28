@@ -66,7 +66,6 @@ public class GameManager
         
         
         else {
-            Console.WriteLine("Tu rival ha aceptado la apuesta!");
             Thread.Sleep(1000);
 
 
@@ -84,6 +83,7 @@ public class GameManager
         if (_playerFirst){
             
             Console.WriteLine("Como tú hiciste la primera Apuesta, tu rival decide si hacer la segunda apuesta primero");
+            Thread.Sleep(1000);
             gambling.ChangeOrder();
             bool rivalDecision = rival1.GetChancetoBet();
             if (rivalDecision){
@@ -143,11 +143,13 @@ public class GameManager
         player.PrintHand();
         player.CheckHand();
         Thread.Sleep(1000);
+        Console.WriteLine();
 
         Console.WriteLine("Este es el Mazo de tu Rival");
         rival.PrintHand();
         rival.CheckHand();
         Thread.Sleep(1000);
+        Console.WriteLine();
         
         int playerOrder = player.GetOrder();
         int rivalOrder = rival.GetOrder();
@@ -156,26 +158,31 @@ public class GameManager
         if (playerOrder < rivalOrder)
         {
             Console.WriteLine("Ganaste!");
+            Thread.Sleep(1000);
             gambling.SetPlayerVictory();
         }
         else if (playerOrder > rivalOrder)
         {
             Console.WriteLine("Perdiste :(");
+            Thread.Sleep(1000);
             gambling.SetRivalVictory();
         }
         else if (playerOrder == rivalOrder) {
             Console.WriteLine("Ambos tienen la misma Mano");
+            Thread.Sleep(1000);
             Console.WriteLine();
             int playerMaxNumber = player.GetMaxNumber();
             int rivalMaxNumber = rival.GetMaxNumber();
             if (playerMaxNumber > rivalMaxNumber )
             {
                 Console.WriteLine("Ganas por tener el valor mas Alto!");
+                Thread.Sleep(1000);
                 gambling.SetPlayerVictory();
             }
             else if (playerMaxNumber < rivalMaxNumber)
             {
                 Console.WriteLine("Pierdes porque tu rival tiene el Valor mas Alto!");
+                Thread.Sleep(1000);
                 gambling.SetRivalVictory();
             }
             else {
@@ -192,6 +199,7 @@ public class GameManager
         }
         } while (decision == "si");
             Console.WriteLine("Prepárate para la siguiente ronda! :)");
+            Thread.Sleep(2000);
         }
     }
 
