@@ -33,7 +33,14 @@ public class Hand
         _hand.Add(newCard);
     }
 
+    public virtual int GetOrder() {
+        return 0;
+    }
 
+    public virtual int GetMaxNumber()
+    {
+        return 0;
+    }
 
 
 

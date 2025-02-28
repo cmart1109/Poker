@@ -1,9 +1,11 @@
 
 using System.ComponentModel.Design;
+using System.IO.Compression;
 
 public class RivalHand : Hand
 {   
     private int _order = 0;
+    private int _maxNumber = 0;
     private List<Card> _hand = new List<Card>();
 
     private bool CheckStraight(List<int> numbers)
@@ -44,9 +46,14 @@ public class RivalHand : Hand
     {
 
     }
+
+    //-----------------------------------------------------------------------------------------------------
+    
+
+
     public override List<Card> GenerateHand(List<Card> deck)
     {
-        for (int i = 1; i <= 3; i++)
+        for (int i = 1; i <= 5; i++)
         {
             _hand.Add(GetRandomCard(deck));
             
@@ -71,6 +78,8 @@ public class RivalHand : Hand
         var CardCounts = GetCardsCount().Values.ToList();
         var SuitsCounts = GetSuitsCount().Values.ToList();
         var CardsNumber = GetCardsCount().Keys.Select(int.Parse).OrderBy(x => x).ToList();
+        var CardsValueOrder = GetCardsCount().Keys.Select(int.Parse).OrderByDescending(x => x).ToList();
+        
 
         int pairs = CardCounts.Count(x => x == 2);
         bool hasThree = CardCounts.Contains(3);
@@ -81,51 +90,71 @@ public class RivalHand : Hand
 
         if (hasFour)
         {
-            Console.WriteLine("Tu Rival tiene un Poker!");
             _order = 3;
+            string number = GetCardsCount().First(x => x.Value == 4).Key;
+            _maxNumber = int.Parse(number);
+            Console.WriteLine("Tu Rival tiene un Poker!");
             
         }
         else if (hasColor && HasStraight)
         {
-            Console.WriteLine("Tu Rival tiene una Escalera de Color!");
             _order = 2;
+            _maxNumber = CardsNumber.Max();
+            Console.WriteLine("Tu Rival tiene una Escalera de Color!");
         }
         else if (HasStraight)
         {
-            Console.WriteLine("Tu Rival tiene una Escalera!");
+            _maxNumber = CardsNumber.Max();
             _order = 6;
+            Console.WriteLine("Tu Rival tiene una Escalera!");
         }
         else if (hasColor)
         {
             Console.WriteLine("Tu Rival tiene un Color!");
+            _maxNumber = CardsNumber.Max();
             _order = 5;
         }
         else if (hasThree && pairs == 1)
         {
-            Console.WriteLine("Tu Rival tiene un FullHouse!");
             _order = 4;
+            string number = GetCardsCount().First(x => x.Value == 3).Key;
+            _maxNumber = int.Parse(number);
+            Console.WriteLine("Tu Rival tiene un FullHouse!");
         }
         else if (hasThree)
         {
-            Console.WriteLine("Tu Rival tiene un Trio!");
             _order = 7;
+            string number = GetCardsCount().First(x => x.Value == 3).Key;
+            _maxNumber = int.Parse(number);
+            Console.WriteLine("Tu Rival tiene un Trio!");
         }
         else if (pairs == 2) {
-            Console.WriteLine("Tu Rival tiene un doble Par!");
             _order = 8;
+            string number = GetCardsCount()
+                .Where(x => x.Value == 2)
+                .Max(x => int.Parse(x.Key))
+                .ToString();
+            _maxNumber = int.Parse(number);
+            Console.WriteLine("Tu Rival tiene un doble Par!");
         }
         else if (pairs == 1)
         {
             Console.WriteLine("Tu Rival tiene un par!");
+            string number = GetCardsCount().First(x => x.Value == 2).Key;
+            _maxNumber = int.Parse(number);
             _order = 9;
         }
         else 
         {
             Console.WriteLine("Tu Rival tiene una carta mas alta!");
+            _maxNumber = CardsNumber.Max();
             _order = 10;
         }
     }
-    public int GetOrder(){
+    public override int GetOrder(){
         return _order;
+    }
+    public override int GetMaxNumber() {
+        return _maxNumber;
     }
 }
