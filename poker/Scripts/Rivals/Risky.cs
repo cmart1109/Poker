@@ -16,7 +16,7 @@ public class Risky : Rival
         int x = random.Next(1,100);
         if (x <= 95){
             return true;
-         } else {
+         } else {z
             return false; 
          }
     }
