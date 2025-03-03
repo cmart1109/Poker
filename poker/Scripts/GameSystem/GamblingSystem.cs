@@ -12,26 +12,27 @@ public class GamblingSystem
     private int _playerBet;
     private int _rivalBet;
     private bool _out;
+
+    private int _rivalLevel;
     public GamblingSystem(){
 
     }
 
     // Esta Funcion genera el Balance Inicial que tienen ambos jugadores
-    public void GetInicialBalance(){
+    public void GetInicialBalance(int rivalBalance){
         _playerBalance = 15;
-        _rivalBalance = 15;
+        _rivalBalance = rivalBalance;
         _bet = 0;
     }
     // Esta determina el orden en que se juega, y muestra el balance de ambos jugadores
     public void StartingBet(){
         _playerFirst = random.Next(2) == 0;
-        DisplayPlayerBalance();
-        DisplayRivalBalance();
+        DisplayBalance();
 
     }
 
     // Esta es la Funcion principal de las apuestas
-    public void Bet(){
+    public void Bet(Rival rival){
         if (_playerFirst) // Si el jugador va primero
         {    
             Thread.Sleep(1000);  
@@ -62,7 +63,7 @@ public class GamblingSystem
         else {
             Console.WriteLine("Tu rival va primero!");
             Thread.Sleep(1000);
-            RivalStartingBet();
+            RivalStartingBet(rival);
             Console.WriteLine($"Tu rival ha hecho una apuesta de {_rivalBet}$");
             Thread.Sleep(1000);
             Console.WriteLine("Te unes a la apuesta?: ");
@@ -120,8 +121,13 @@ public class GamblingSystem
         }
     }
     // esta funcion se usa para generar la segunda apuesta del rival    
-    public void RivalSecondBet(){
-            RivalStartingBet();
+    public void RivalSecondBet(Rival rival, int order){
+            bool chanceToWin = rival.CalculateHandOrder(order);
+            if (chanceToWin){
+            _rivalBet = _rivalBalance;
+            } else {
+            _rivalBet = random.Next(0, _rivalBalance);
+            }
             Console.WriteLine($"Tu rival ha hecho una apuesta de {_rivalBet}$");
             Console.WriteLine("Te unes a la apuesta?: ");
             string decision = Console.ReadLine();
@@ -157,15 +163,12 @@ public class GamblingSystem
     }
 
 
-    public void RivalStartingBet(){
-        _rivalBet = random.Next(1,_rivalBalance);
+    public void RivalStartingBet(Rival rival){
+        _rivalBet = rival.GetRivalStartingBet();
 
     }
-    public void DisplayPlayerBalance(){
+    public void DisplayBalance(){
         Console.WriteLine($"Tienes un Balance de {_playerBalance}$");
-    }
-
-    public void DisplayRivalBalance(){
         Console.WriteLine($"Tu rival tiene un Balance de {_rivalBalance}$");
     }
 
@@ -175,7 +178,7 @@ public class GamblingSystem
         Console.WriteLine($"has ganado el dinero de la apuesta!!!");
         Console.WriteLine($"Has ganado {_bet}$");
         _playerBalance += _bet;
-        DisplayPlayerBalance();
+        DisplayBalance();
         _bet = 0;
         Console.WriteLine("Ahora el plato de apuestas esta vacío");
     }

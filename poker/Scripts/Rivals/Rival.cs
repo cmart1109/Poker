@@ -10,7 +10,7 @@ public class Rival {
       _level = level;
       _balance = balance;
    }
-    public bool GetChancetoBet(){
+    public virtual bool GetChancetoBet(){
          int x = random.Next(1,100);
          if (x <= 50){
             return true;
@@ -19,8 +19,8 @@ public class Rival {
          }
          
     }
-   public int CalculateHandOrder(int order){
-      return 0;
+   public virtual bool CalculateHandOrder(int order){
+      return false;
    }
     public string GetRivalName(){
       return _name;
@@ -30,5 +30,11 @@ public class Rival {
       return _balance;
     }
 
-    
+    public virtual int GetRivalStartingBet(){
+      return random.Next(_balance - 5, _balance);
+    }
+
+    public virtual int CheckOrderToWin(int order){
+      return 0;
+    }
 }

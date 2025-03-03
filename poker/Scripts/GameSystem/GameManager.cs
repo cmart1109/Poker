@@ -11,26 +11,25 @@ public class GameManager
     private string _betDecision;
     private string _inicialdecision;
     private bool checkbet;
-    
+    int _rivalOrder;
     public void Start(){
 
+        // Aqui genero el rival -------------------------------------------------------
+        Risky rival1 = new Risky("Carlos", 2, 15);
+        // --------------------------------------------------------------------------------------------
+        
         
         GamblingSystem gambling = new GamblingSystem();
-        gambling.GetInicialBalance();
+        gambling.GetInicialBalance(rival1.GetRIvalBalance());
 
         Console.WriteLine("Bienvenidos a Poker, donde su suerte se ve reflejada!");
         while (true)
         {
-        CheckBalance(gambling);
         Console.WriteLine("Una Partida esta por comenzar.");
         Console.WriteLine("Te unes?");
         _inicialdecision = Console.ReadLine();
         if (_inicialdecision == "si"){
 
-        // Aqui genero el rival -------------------------------------------------------
-        Rival rival1 = new Rival("Carlos", 2, 15);
-        // --------------------------------------------------------------------------------------------
-        
         // Este comando genera las 52 Cartas 
         checkbet = false;
         GenerateDeck();
@@ -39,7 +38,7 @@ public class GameManager
 
         // Aqui se determina el orden y se hace la Apuesta Inicial
         gambling.StartingBet();
-        gambling.Bet();
+        gambling.Bet(rival1);
         // Aqui se verifica si uno de los dos lados cancela la Apuesta
         checkbet = gambling.checkBet();
         if (checkbet){
@@ -94,6 +93,7 @@ public class GameManager
         // Aqui definimos el ganador de la partida
         CheckWinner(player, rival, gambling);
         }
+        CheckBalance(gambling);
         Console.WriteLine("Quieres volver a jugar?");
         decision = Console.ReadLine();
         if (decision != "si"){
@@ -112,20 +112,20 @@ public class GameManager
     public void CheckWinner(YourHand player, RivalHand rival, GamblingSystem gambling)
     {
      int playerOrder = player.GetOrder();
-        int rivalOrder = rival.GetOrder();
-        if (playerOrder < rivalOrder)
+        _rivalOrder = rival.GetOrder();
+        if (playerOrder < _rivalOrder)
         {
             Console.WriteLine("Ganaste!");
             Thread.Sleep(1000);
             gambling.SetPlayerVictory();
         }
-        else if (playerOrder > rivalOrder)
+        else if (playerOrder > _rivalOrder)
         {
             Console.WriteLine("Perdiste :(");
             Thread.Sleep(1000);
             gambling.SetRivalVictory();
         }
-        else if (playerOrder == rivalOrder) {
+        else if (playerOrder == _rivalOrder) {
             Console.WriteLine("Ambos tienen la misma Mano");
             Thread.Sleep(1000);
             Console.WriteLine();
@@ -154,7 +154,7 @@ public class GameManager
                 _playerFirst = gambling.IsPlayerFirst();
         if (_playerFirst){
             
-            Console.WriteLine("Como tú hiciste la primera Apuesta, tu rival decide si hacer la segunda apuesta primero");
+            Console.WriteLine("Como tú hiciste la apuesta anterior, tu rival decide si hacer la siguiente apuesta primero");
             Thread.Sleep(1000);
             gambling.ChangeOrder();
             bool rivalDecision = rival1.GetChancetoBet();
@@ -162,7 +162,7 @@ public class GameManager
                 Console.WriteLine("Tu rival ha decidido hacer una segunda apuesta!");
                 Thread.Sleep(1000);
                 Console.WriteLine();
-                gambling.RivalSecondBet(); // Aqui el rival coloca la segunda apuesta y te pregunta si la quieres incrementar
+                gambling.RivalSecondBet(rival1, _rivalOrder); // Aqui el rival coloca la segunda apuesta y te pregunta si la quieres incrementar
                 checkbet = gambling.checkBet();
                 if (checkbet){
                 Console.WriteLine("Tu rival ha decidido desistir de esta apuesta");
@@ -178,7 +178,7 @@ public class GameManager
                 _betDecision = Console.ReadLine();
                 if (_betDecision == "si"){
                 gambling.ChangeOrder();
-                gambling.Bet();
+                gambling.Bet(rival1);
                 checkbet = gambling.checkBet();
                 if (checkbet){
                 Console.WriteLine("La Partida se termina por rechazo de Apuesta");
@@ -192,12 +192,12 @@ public class GameManager
             }
         }
         else {
-            Console.WriteLine("Como tu rival comenzo, tu haces la segunda apuesta primero");
+            Console.WriteLine("Como tu rival hizo la apuesta anterior, tu haces la siguiente apuesta");
             Console.WriteLine("Deseas incrementar la apuesta?");
             _betDecision = Console.ReadLine();
             if (_betDecision == "si"){
                 gambling.ChangeOrder();
-                gambling.Bet();
+                gambling.Bet(rival1);
             } else {
 
             }
