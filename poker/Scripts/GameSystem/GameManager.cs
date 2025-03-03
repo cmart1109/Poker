@@ -1,4 +1,5 @@
 using System.ComponentModel.Design.Serialization;
+using System.Security.Cryptography.X509Certificates;
 
 public class GameManager
 {
@@ -10,42 +11,26 @@ public class GameManager
     private string _betDecision;
     private string _inicialdecision;
     private bool checkbet;
-    public GameManager()
-    {
-
-    }
+    
     public void Start(){
+
+        
         GamblingSystem gambling = new GamblingSystem();
         gambling.GetInicialBalance();
 
         Console.WriteLine("Bienvenidos a Poker, donde su suerte se ve reflejada!");
-        Console.WriteLine("Te unes a esta ronda?");
+        while (true)
+        {
+        CheckBalance(gambling);
+        Console.WriteLine("Una Partida esta por comenzar.");
+        Console.WriteLine("Te unes?");
         _inicialdecision = Console.ReadLine();
+        if (_inicialdecision == "si"){
 
-        // Aqui Comienza el Juego
-        while (_inicialdecision == "si"){
-        Rival rival1 = new Rival();
-        do {
-
-        // Aqui verifico yo si el jugador o el rival se han quedado sin dinero 
+        // Aqui genero el rival -------------------------------------------------------
+        Rival rival1 = new Rival("Carlos", 2, 15);
+        // --------------------------------------------------------------------------------------------
         
-        _rivalout = gambling.IsRivalOut();
-        _playerout = gambling.IsPlayerOut();
-        if (_rivalout == true)
-        {
-            Console.WriteLine("Tu rival se ha quedado sin dinero!");
-            Console.WriteLine("Gracias por Jugar al Poker :)");
-            Environment.Exit(0);
-        }
-        else if (_playerout == true)
-        {
-            Console.WriteLine("Te has quedado sin dinero!");
-            Console.WriteLine("Gracias por Jugar al Poker :)");
-            Environment.Exit(0);
-        }
-         else {
-        
-
         // Este comando genera las 52 Cartas 
         checkbet = false;
         GenerateDeck();
@@ -55,82 +40,32 @@ public class GameManager
         // Aqui se determina el orden y se hace la Apuesta Inicial
         gambling.StartingBet();
         gambling.Bet();
-
         // Aqui se verifica si uno de los dos lados cancela la Apuesta
         checkbet = gambling.checkBet();
         if (checkbet){
             Console.WriteLine("La Partida se termina por rechazo de Apuesta");
             gambling.ReturnMoneyFromReject();
-            break;
-        } 
-        
-        
-        else {
-            Thread.Sleep(1000);
-
-
+            continue;
+        }
+        Thread.Sleep(1000);
         // Aqui se generan los dos mazos
         player.GenerateHand(_deck);
         rival.GenerateHand(_deck);
+
         Console.WriteLine("Estas son tus primeras cartas");
         player.PrintHand();
         player.CheckHand();
         Thread.Sleep(1000);
         Console.WriteLine();
-
+    
         // A partir de aqui comienza la segunda Apuesta 
-        _playerFirst = gambling.IsPlayerFirst();
-        if (_playerFirst){
-            
-            Console.WriteLine("Como tú hiciste la primera Apuesta, tu rival decide si hacer la segunda apuesta primero");
-            Thread.Sleep(1000);
-            gambling.ChangeOrder();
-            bool rivalDecision = rival1.GetChancetoBet();
-            if (rivalDecision){
-                Console.WriteLine("Tu rival ha decidido hacer una segunda apuesta!");
-                Thread.Sleep(1000);
-                Console.WriteLine();
-                gambling.RivalSecondBet();
-                checkbet = gambling.checkBet();
-                if (checkbet){
-                Console.WriteLine("La Partida se termina por rechazo de Apuesta");
-                gambling.ReturnMoneyFromReject();
-                break;
-                } 
-            } else {
-
-                Console.WriteLine("Tu rival ha decidido no hacer una segunda apuesta");
-                Thread.Sleep(1000);
-                Console.WriteLine();
-                Console.WriteLine("Deseas incrementar la apuesta?");
-                _betDecision = Console.ReadLine();
-                if (_betDecision == "si"){
-                gambling.ChangeOrder();
-                gambling.Bet();
-                checkbet = gambling.checkBet();
-                if (checkbet){
-                Console.WriteLine("La Partida se termina por rechazo de Apuesta");
-                gambling.ReturnMoneyFromReject();
-                break;
-                } 
-                
-            } else {
-
-            }
-            }
+        NewBet(gambling, rival1);
+        checkbet = gambling.checkBet();
+        if (checkbet){
+            Console.WriteLine("La Partida se termina por rechazo de Apuesta");
+            gambling.ReturnMoneyFromReject();
+            continue;
         }
-        else {
-            Console.WriteLine("Como tu rival comenzo, tu haces la segunda apuesta primero");
-            Console.WriteLine("Deseas incrementar la apuesta?");
-            _betDecision = Console.ReadLine();
-            if (_betDecision == "si"){
-                gambling.ChangeOrder();
-                gambling.Bet();
-            } else {
-
-            }
-        }
-
 
         // Aqui es cuando cada jugador toma una carta más!
         Console.WriteLine("Cada jugador toma una carta más");
@@ -150,6 +85,8 @@ public class GameManager
         rival.CheckHand();
         Thread.Sleep(1000);
         Console.WriteLine();
+
+
         
         int playerOrder = player.GetOrder();
         int rivalOrder = rival.GetOrder();
@@ -196,10 +133,64 @@ public class GameManager
         if (decision != "si"){
             Environment.Exit(0);
         }
+        else {
+            Console.WriteLine("Preparate para la siguiente ronda");
         }
-        } while (decision == "si");
-            Console.WriteLine("Prepárate para la siguiente ronda! :)");
-            Thread.Sleep(2000);
+    }
+}
+    
+
+    public void NewBet(GamblingSystem gambling, Rival rival1){
+                _playerFirst = gambling.IsPlayerFirst();
+        if (_playerFirst){
+            
+            Console.WriteLine("Como tú hiciste la primera Apuesta, tu rival decide si hacer la segunda apuesta primero");
+            Thread.Sleep(1000);
+            gambling.ChangeOrder();
+            bool rivalDecision = rival1.GetChancetoBet();
+            if (rivalDecision){
+                Console.WriteLine("Tu rival ha decidido hacer una segunda apuesta!");
+                Thread.Sleep(1000);
+                Console.WriteLine();
+                gambling.RivalSecondBet(); // Aqui el rival coloca la segunda apuesta y te pregunta si la quieres incrementar
+                checkbet = gambling.checkBet();
+                if (checkbet){
+                Console.WriteLine("Tu rival ha decidido desistir de esta apuesta");
+                gambling.ReturnMoneyFromReject();
+                return;
+                } 
+            } else {
+
+                Console.WriteLine("Tu rival ha decidido no hacer una segunda apuesta");
+                Thread.Sleep(1000);
+                Console.WriteLine();
+                Console.WriteLine("Deseas incrementar la apuesta?");
+                _betDecision = Console.ReadLine();
+                if (_betDecision == "si"){
+                gambling.ChangeOrder();
+                gambling.Bet();
+                checkbet = gambling.checkBet();
+                if (checkbet){
+                Console.WriteLine("La Partida se termina por rechazo de Apuesta");
+                gambling.ReturnMoneyFromReject();
+                return;
+                } 
+                
+            } else {
+
+            }
+            }
+        }
+        else {
+            Console.WriteLine("Como tu rival comenzo, tu haces la segunda apuesta primero");
+            Console.WriteLine("Deseas incrementar la apuesta?");
+            _betDecision = Console.ReadLine();
+            if (_betDecision == "si"){
+                gambling.ChangeOrder();
+                gambling.Bet();
+            } else {
+
+            }
         }
     }
 
@@ -209,5 +200,21 @@ public class GameManager
     _deck = deck.GenerateCards();
    }
 
+    public void CheckBalance(GamblingSystem gambling){
 
+        _rivalout = gambling.IsRivalOut();
+        _playerout = gambling.IsPlayerOut();
+        if (_rivalout == true)
+        {
+            Console.WriteLine("Tu rival se ha quedado sin dinero!");
+            Console.WriteLine("Gracias por Jugar al Poker :)");
+            Environment.Exit(0);
+        }
+        else if (_playerout == true)
+        {
+            Console.WriteLine("Te has quedado sin dinero!");
+            Console.WriteLine("Gracias por Jugar al Poker :)");
+            Environment.Exit(0);
+        }
+    }
 }

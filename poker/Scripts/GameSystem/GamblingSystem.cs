@@ -33,42 +33,27 @@ public class GamblingSystem
 
     // Esta es la Funcion principal de las apuestas
     public void Bet(){
-        if (_playerFirst)
+        if (_playerFirst) // Si el jugador va primero
         {    
             Thread.Sleep(1000);  
             _out = false;
-    do   {
+        do   {
             Console.WriteLine("ingresa tu apuesta:");
             while (!int.TryParse(Console.ReadLine(), out _playerBet))
                 {
-                Console.WriteLine("Entrada Invalida. Por favor, ingresa un número válido");
-                Console.WriteLine("Ingresa un número: ");
+                Console.WriteLine("Apuesta Invalida. Por favor, ingresa un número válido: ");
                 }   
                 if(_playerBet > _playerBalance)
                 {
                     Console.WriteLine("La apuesta que deseas ingresar supera tu Balance!");
                 }
                 else {
-                    Console.WriteLine($"Número Ingresado: {_playerBet}");
+                    Console.WriteLine($"Has puesto una apuesta de {_playerBet}$ en el plato de apuestas");
                     Thread.Sleep(1000);
                     _playerBalance -= _playerBet;
                     Console.WriteLine($"Ahora tu balance es de {_playerBalance}$");
                     Thread.Sleep(1000);
-                // -------------------------------------------------------------------------------------
-                    if (_rivalBalance >= _playerBet) {
-                        Console.WriteLine("Tu rival ha aceptado la apuesta!");
-                        _rivalBalance -= _playerBet;
-                        _bet += _playerBet * 2;
-                        Thread.Sleep(1000);
-                    } else {
-                        Console.WriteLine("Tu rival no tiene suficiente para esa apuesta inicial.");
-                        Console.WriteLine("La Partida se termina.");
-                        Console.WriteLine("Te quedas con lo que esta en el plato de apuestas");
-                        _playerBalance += _playerBet;
-                        _bet = 0;
-                        _out = true;
-                    }
-                // -------------------------------------------------------------------------------------
+                    RivalBet(); // Con esta funcion se decide si el rival rechaza la oferta o no
                     Console.WriteLine($"Hay {_bet}$ en Juego!");
                     break;
             }
@@ -114,6 +99,25 @@ public class GamblingSystem
         _rivalBet = 0;
     }
 
+
+    public void RivalBet(){
+        if (_rivalBalance >= _playerBet) {
+            Console.WriteLine("Tu rival ha aceptado la apuesta!");
+            _rivalBalance -= _playerBet;
+            _bet += _playerBet * 2;
+            Thread.Sleep(1000);
+        } else {
+            Console.WriteLine("Tu rival no tiene suficiente para esa apuesta.");
+            Thread.Sleep(1000);
+            Console.WriteLine("La Partida se termina.");
+            Thread.Sleep(1000);
+            Console.WriteLine("Te quedas con lo que esta en el plato de apuestas");
+            Thread.Sleep(1000);
+            _playerBalance += _playerBet;
+            _bet = 0;
+            _out = true;
+        }
+    }
     // esta funcion se usa para generar la segunda apuesta del rival    
     public void RivalSecondBet(){
             RivalStartingBet();
