@@ -49,7 +49,7 @@ public class YourHand : Hand
 
     public override List<Card> GenerateHand(List<Card> deck)
     {
-        for (int i = 1; i <= 2; i++)
+        for (int i = 1; i <= 3; i++)
         {
             _hand.Add(GetRandomCard(deck));
             

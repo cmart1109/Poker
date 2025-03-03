@@ -11,7 +11,6 @@ public class GamblingSystem
     private bool _playerFirst;
     private int _playerBet;
     private int _rivalBet;
-
     private bool _out;
     public GamblingSystem(){
 
@@ -91,6 +90,8 @@ public class GamblingSystem
                 Console.WriteLine("La Partida se termina.");
                 Console.WriteLine("El rival se queda con lo que esta en el plato de apuestas");
                 _out = true;
+                ReturnMoneyFromReject();
+                return;
 
             }
 
@@ -143,10 +144,11 @@ public class GamblingSystem
             }   
             else  {
                 Console.WriteLine("No se apuesta");
-                _rivalBet += _bet;
                 Console.WriteLine("La Partida se termina.");
                 Console.WriteLine("El rival se queda con lo que esta en el plato de apuestas");
                 _out = true;
+                ReturnMoneyFromReject();
+                return;
             }
 
         
@@ -228,8 +230,7 @@ public class GamblingSystem
     }
 
     public void ReturnMoneyFromReject(){
-        _playerBalance += _bet / 2;
-        _rivalBalance += _bet / 2;
+        _rivalBalance += _bet;
         _bet = 0;
 
     }

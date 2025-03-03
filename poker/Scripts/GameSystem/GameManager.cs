@@ -53,15 +53,12 @@ public class GameManager
         rival.GenerateHand(_deck);
 
         Console.WriteLine("Estas son tus primeras cartas");
-        player.PrintHand();
-        player.CheckHand();
-        Thread.Sleep(1000);
-        Console.WriteLine();
+        ShowPlayerCards(player);
     
         // A partir de aqui comienza la segunda Apuesta 
-        NewBet(gambling, rival1);
-        checkbet = gambling.checkBet();
-        if (checkbet){
+        Console.WriteLine("Es momento de la segunda Apuesta");
+        MakeBet(gambling, rival1);
+                if (checkbet){
             Console.WriteLine("La Partida se termina por rechazo de Apuesta");
             gambling.ReturnMoneyFromReject();
             continue;
@@ -69,29 +66,53 @@ public class GameManager
 
         // Aqui es cuando cada jugador toma una carta más!
         Console.WriteLine("Cada jugador toma una carta más");
-        Thread.Sleep(2000);
-        player.GetCard(_deck);
-        rival.GetCard(_deck);
+        TakeACard(player,rival);
+
+        // Aqui van el mostrar tus cartas
+        ShowPlayerCards(player);
+
+        // Tercera Apuesta 
+        Console.WriteLine("Es momento de la última Apuesta");
+        MakeBet(gambling, rival1);
+        if (checkbet){
+            Console.WriteLine("La Partida se termina por rechazo de Apuesta");
+            gambling.ReturnMoneyFromReject();
+            continue;
+        }
 
 
-         Console.WriteLine("Estas son tus cartas");
-        player.PrintHand();
-        player.CheckHand();
-        Thread.Sleep(1000);
-        Console.WriteLine();
+        Console.WriteLine("Cada jugador toma la última carta");
+        TakeACard(player,rival);        
 
+        ShowPlayerCards(player);
+        
         Console.WriteLine("Este es el Mazo de tu Rival");
         rival.PrintHand();
         rival.CheckHand();
         Thread.Sleep(1000);
         Console.WriteLine();
+        // Aqui definimos el ganador de la partida
+        CheckWinner(player, rival, gambling);
+        }
+        Console.WriteLine("Quieres volver a jugar?");
+        decision = Console.ReadLine();
+        if (decision != "si"){
+            Environment.Exit(0);
+        }
+        else {
+            Console.WriteLine("Preparate para la siguiente ronda");
+        }
+    }
+}
+    // -----------------------------------------------------------------------------------------------
+    // -------------- Funciones adicionales para complementar el juego -------------------------------
+    // -----------------------------------------------------------------------------------------------
 
 
-        
-        int playerOrder = player.GetOrder();
+    public void CheckWinner(YourHand player, RivalHand rival, GamblingSystem gambling)
+    {
+     int playerOrder = player.GetOrder();
         int rivalOrder = rival.GetOrder();
-
-    // Aqui esta el algoritmo para verificar que jugador Gana, o si hay un empate
         if (playerOrder < rivalOrder)
         {
             Console.WriteLine("Ganaste!");
@@ -127,18 +148,7 @@ public class GameManager
                 gambling.SetTie();
             }
         }
-        }
-        Console.WriteLine("Quieres volver a jugar?");
-        decision = Console.ReadLine();
-        if (decision != "si"){
-            Environment.Exit(0);
-        }
-        else {
-            Console.WriteLine("Preparate para la siguiente ronda");
-        }
     }
-}
-    
 
     public void NewBet(GamblingSystem gambling, Rival rival1){
                 _playerFirst = gambling.IsPlayerFirst();
@@ -216,5 +226,25 @@ public class GameManager
             Console.WriteLine("Gracias por Jugar al Poker :)");
             Environment.Exit(0);
         }
+    }
+
+    public void MakeBet(GamblingSystem gambling, Rival rival1){
+        NewBet(gambling, rival1);
+        checkbet = gambling.checkBet();
+
+    }
+
+    public void TakeACard(YourHand player, RivalHand rival){
+        Thread.Sleep(2000);
+        player.GetCard(_deck);
+        rival.GetCard(_deck);
+    }
+
+    public void ShowPlayerCards(YourHand player){
+        Console.WriteLine("Estas son tus cartas");
+        player.PrintHand();
+        player.CheckHand();
+        Thread.Sleep(1000);
+        Console.WriteLine();
     }
 }
